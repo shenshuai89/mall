@@ -6,6 +6,7 @@
                     <th>图片</th>
                     <th>名称</th>
                     <th>价格</th>
+                    <th>库存</th>
                 </tr>
             </thead>
             <tr v-for="item in tableData" class="item_list">
@@ -14,6 +15,7 @@
                 </td>
                 <td>{{item.productName}}</td>
                 <td>{{item.salePrice}}</td>
+                <td>{{item.stock}}</td>
             </tr>
             <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
                 <img v-if="loading" src="../../assets/loading-spinning-bubbles.svg" title="加载中" />
