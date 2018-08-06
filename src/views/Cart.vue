@@ -104,7 +104,7 @@
             </div>
         </modal>
         <modal :mdShow="isShowAddMd" @close="closeModal">
-            <p slot="message">已达到最大库存，不能再加。</p>
+            <p slot="message">亲，已达到最大库存，不能再加！</p>
             <div slot="btnGroup">
                 <a class="btn btn-m" @click="isShowAddMd = false">关闭</a>
             </div>
