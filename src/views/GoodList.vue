@@ -24,7 +24,8 @@
               <dt>价格:</dt>
               <dd><a @click="setPriceFilter('all')" href="javascript:void(0)" :class="{'cur':priceChecked=='all'}">全部</a></dd>
               <dd v-for="(item,index) in priceList">
-                <a @click="setPriceFilter(index)" href="javascript:void(0)" :class="{'cur':priceChecked==index}">{{item.startPrice}} - {{item.endPrice}}</a>
+                <a v-if="item.endPrice" @click="setPriceFilter(index)" href="javascript:void(0)" :class="{'cur':priceChecked==index}">{{item.startPrice}} - {{item.endPrice}}</a>
+                <a v-if="!item.endPrice" @click="setPriceFilter(index)" href="javascript:void(0)" :class="{'cur':priceChecked==index}">{{item.startPrice}}以上</a>
               </dd>
             </dl>
           </div>
@@ -109,6 +110,9 @@
         {
           startPrice:'1000.00',
           endPrice:'5000.00'
+        },
+        {
+          startPrice:'5000.00'
         }],
         priceChecked:'all',
         filterShow:false,

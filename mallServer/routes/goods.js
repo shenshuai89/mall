@@ -44,6 +44,8 @@ router.get('/', function(req,res,next){
                 priceGt=500;priceLte=1000; break;
             case "3":
                 priceGt=1000;priceLte=5000; break;
+            case "4":
+                priceGt=5000;priceLte=1000000000000000000000000000; break;
         }
         params={
             "salePrice":{
@@ -205,6 +207,7 @@ router.post("/addCart", function(req,res,next){
                                     productId:doc1.productId,
                                     productName:doc1.productName,
                                     salePrice:doc1.salePrice,
+                                    stock:doc1.stock,
                                     productImage:doc1.productImage
                                 }
                                 // 给购物车添加商品
@@ -219,7 +222,7 @@ router.post("/addCart", function(req,res,next){
                                         res.json({
                                             status:"0",
                                             msg:"",
-                                            result:"success"
+                                            result:userDoc
                                         })
                                     }
                                 })

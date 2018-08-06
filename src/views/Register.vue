@@ -146,7 +146,7 @@
                     }else if(testStr.length>16){
                         this.vNameErrorTxt = "设置的长度过长";
                     }else{
-                        this.vNameErrorTxt = "用户名必须为4到6位字母、数字或汉字"
+                        this.vNameErrorTxt = "用户名必须为4到16位字母、数字或汉字"
                     }
                 }
             },
@@ -196,8 +196,8 @@
                     "phone":this.vPhone
                 }).then((response)=>{
                     let res = response.data;
-                    this.vPhoneErrorTxt = '';
-                    if(res.status == 0){
+                    // this.vPhoneErrorTxt = '';
+                    if(res.status == "110110"){
                         this.vPhoneErrorTxt = res.result;
                     }
                 })

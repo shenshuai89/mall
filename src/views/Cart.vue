@@ -29,7 +29,7 @@
                     </a>
                 </div>
                 <div class="cart-item-pic">
-                    <img :src="'/static/'+item.productImage" :alt="item.productName">
+                    <img :src="'http://localhost:3000/static/images/'+item.productImage" :alt="item.productName">
                 </div>
                 <div class="cart-item-title">
                     <div class="item-name">{{item.productName}}</div>
@@ -103,6 +103,12 @@
                 <a class="btn btn-m" @click="isShowReduceMd = false">关闭</a>
             </div>
         </modal>
+        <modal :mdShow="isShowAddMd" @close="closeModal">
+            <p slot="message">已达到最大库存，不能再加。</p>
+            <div slot="btnGroup">
+                <a class="btn btn-m" @click="isShowAddMd = false">关闭</a>
+            </div>
+        </modal>
         <div class="md-modal modal-msg md-modal-transition" :class="{'md-show':loginModalFlag}">
             <div class="md-modal-inner">
               <div class="md-top">
@@ -160,6 +166,7 @@
                 productId:'',
                 productNum:0,
                 isShowReduceMd:false,
+                isShowAddMd:false
             }
         },
         mounted () {
@@ -247,6 +254,11 @@
                         break;
                     case "add":
                         obj.productNum++;
+                        if(obj.productNum>obj.stock){
+                            obj.productNum = obj.stock;
+                        }
+                        this.isShowAddMd = true;
+                        return;
                         this.$store.commit("updateCartCount",1)
                         break;
                     case "reduce":
@@ -274,6 +286,7 @@
                 this.isShowLoginMd =false;
                 this.isShowdelItem = false;
                 this.isShowReduceMd = false;
+                this.isShowAddMd = false;
             },
             toggleCheckAll(){
                 var flag = !this.checkAll;

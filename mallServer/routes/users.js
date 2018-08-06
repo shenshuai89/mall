@@ -25,7 +25,7 @@ router.post("/queryPhone", function(req,res,next){
     }else{
       if(doc){
         res.json({
-          status:'0',
+          status:'110110',
           msg:'',
           result:'该号码已经注册'
         })
