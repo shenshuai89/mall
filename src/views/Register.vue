@@ -10,25 +10,32 @@
             </h2>
             <div class="md-content">
                 <div class="confirm-tips">
-                    <div class="error-wrap">
-                        <span class="error error-show" v-show="regError">两次输入密码不一致</span>
-                    </div>
                     <ul>
-                            <li class="regi_form_input">
-                                <span class="red_tip ml-10">*</span>
-                                <i class="icon IconPeople"></i>
-                                <input type="text" tabindex="1" v-model="vName" class="regi_login_input regi_login_input_left" placeholder="请输入用户名" data-type="loginname">
-                            </li>
-                            <li class="regi_form_input noMargin">
-                                <span class="red_tip ml-10">*</span>
-                                <i class="icon IconPwd"></i>
-                                <input type="password" tabindex="2" v-model="vPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="请输入密码">
-                            </li>
-                            <li class="regi_form_input noMargin">
-                                <span class="red_tip ml-10">*</span>
-                                <i class="icon IconPwd"></i>
-                                <input type="password" tabindex="3" v-model="vRepPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="请再次输入密码">
-                            </li>
+                        <li class="regi_form_input">
+                            <span class="red_tip ml-10">*</span>
+                            <i class="icon IconPeople"></i>
+                            <input type="text" tabindex="1" v-model.trim="vName" class="regi_login_input regi_login_input_left" placeholder="请输入用户名" data-type="loginname" maxlength="16">
+                            <p class="red_tip error">{{vNameErrorTxt}}</p>
+                        </li>
+                        <li class="regi_form_input">
+                            <span class="red_tip ml-10">*</span>
+                            <i class="icon IconPhone"></i>
+                            <input type="text" tabindex="1" v-model.trim="vPhone" @blur="queryPhone"
+                                class="regi_login_input regi_login_input_left" placeholder="请输入手机号" data-type="loginname" maxlength="11">
+                            <p class="red_tip error">{{vPhoneErrorTxt}}</p>
+                        </li>
+                        <li class="regi_form_input noMargin">
+                            <span class="red_tip ml-10">*</span>
+                            <i class="icon IconPwd"></i>
+                            <input type="password" tabindex="2" v-model.trim="vPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="请输入密码" maxlength="20">
+                            <p class="red_tip error">{{vPwdErrorTxt}}</p>
+                        </li>
+                        <li class="regi_form_input noMargin">
+                            <span class="red_tip ml-10">*</span>
+                            <i class="icon IconPwd"></i>
+                            <input type="password" tabindex="3" v-model.trim="vRepPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="请再次输入密码" maxlength="20">
+                            <p class="red_tip error">{{vRepPwdErrorTxt}} </p>
+                        </li>
                     </ul>
                 </div>
                 <div class="login-wrap">
@@ -94,8 +101,13 @@
                 userPwd:"",
                 loginModalFlag:false,
                 vName:'',
+                vPhone:'',
                 vPwd:'',
                 vRepPwd:'',
+                vNameErrorTxt:'',
+                vPhoneErrorTxt:'',
+                vPwdErrorTxt:'',
+                vRepPwdErrorTxt:'',
                 registerModalFlag:false,
                 showLoading:false,
                 showConfirm:false
@@ -108,7 +120,7 @@
             regError(){
                 if(this.vPwd=='' || this.vRepPwd=='') return;
                     return this.vPwd != this.vRepPwd;
-                },
+            },
             forbidBtn(){
                 if(this.vPwd=='' || this.vRepPwd=='' || this.vName ==''){
                     return true;
@@ -122,25 +134,95 @@
                 if(newVal == '') {
                     this.errorTip = false;
                 }
+            },
+            vName(newV,oldV){
+                if(newV === ""){
+                    this.vNameErrorTxt = "用户名为必填项";
+                }else{
+                    var testStr = this.vName+'';
+                    this.vNameErrorTxt = "";
+                    if(/^[a-zA-Z0-9_\u4e00-\u9fa5\.]{4,16}$/.test(testStr)){
+                        this.vNameErrorTxt = "";
+                    }else if(testStr.length>16){
+                        this.vNameErrorTxt = "设置的长度过长";
+                    }else{
+                        this.vNameErrorTxt = "用户名必须为4到6位字母、数字或汉字"
+                    }
+                }
+            },
+            vPhone(newV,oldV){
+                if(newV === ""){
+                    this.vPhoneErrorTxt = "手机号为必填项"
+                }else{
+                    this.vPhoneErrorTxt = "";
+                    if(/^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/.test(this.vPhone)){
+                        this.vPhoneErrorTxt = ""
+                    }else{
+                        this.vPhoneErrorTxt = "手机号码不符合规范"
+                    }
+                }
+            },
+            vPwd(newV,oldV){
+                if(newV === ""){
+                    this.vPwdErrorTxt = "密码为必填项"
+                }else{
+                    this.vPwdErrorTxt = "";
+                    if(/^[a-zA-Z0-9_]{6,20}$/.test(this.vPwd)){
+                        this.vPwdErrorTxt = ""
+                    }else{
+                        this.vPwdErrorTxt = "密码不符合规范"
+                    }
+                }
+            },
+            vRepPwd(newV,oldV){
+                if(newV === ""){
+                    this.vRepPwdErrorTxt = "请再次输入密码"
+                }else{
+                    this.vRepPwdErrorTxt = "";
+                    if(this.vPwd!==this.vRepPwd){
+                        this.vRepPwdErrorTxt = "两次输入密码不一致"
+                    }else{
+                        this.vRepPwdErrorTxt = ""
+                    }
+                }
             }
         },
         mounted () {
             
         },
         methods: {
+            queryPhone(){
+                axios.post("/users/queryPhone",{
+                    "phone":this.vPhone
+                }).then((response)=>{
+                    let res = response.data;
+                    this.vPhoneErrorTxt = '';
+                    if(res.status == 0){
+                        this.vPhoneErrorTxt = res.result;
+                    }
+                })
+            },
             register(){
-                if(this.vPwd=='' || this.vRepPwd=='' || this.vName =='') {
+                if(this.vPwd=='' 
+                    || this.vRepPwd=='' 
+                    || this.vName =='' 
+                    || this.vPhoneErrorTxt != ''
+                    || this.vNameErrorTxt != ''
+                    || this.vPwdErrorTxt != ''
+                    || this.vRepPwdErrorTxt != '') {
                     return;
                 }
                 axios.post("/users/register",{
                     userName:this.vName,
-                    userPwd:this.vPwd
+                    userPwd:this.vPwd,
+                    phone:this.vPhone
                     }).then((response)=>{
                     let res = response.data;
                     if(res.status == "0"){
                         // 注册成功
                         this.registerModalFlag = false;
                         this.vName = '';
+                        this.vPhone = ''
                         this.vPwd = '';
                         this.vRepPwd = '';
                         this.userName = res.result.userName;
@@ -198,6 +280,12 @@
     }
     .register .content .md-top{
         margin: 20px 0;
+    }
+    .error{
+        position: absolute;
+        top:34px;
+        left: 43px;
+        font-size: 12px;
     }
     .red_tip{
         color:#d31723;

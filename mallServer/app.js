@@ -88,7 +88,8 @@ app.use(function(req, res, next){
     next();
   }else{
     // cookies.userId不存在，未登录
-    if(req.originalUrl=="/users/login" || req.originalUrl=="/users/logout" || req.path =="/goods" || req.originalUrl=="/users/register"){
+    if(req.originalUrl=="/users/login" || req.originalUrl=="/users/logout" || req.path =="/goods" || req.originalUrl=="/users/register"
+    || req.originalUrl=="/users/queryPhone"){
       next();
     }else{
       res.json({

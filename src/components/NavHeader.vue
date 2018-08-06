@@ -51,7 +51,7 @@
           </div>
           <div slot="btnGroup">
               <div class="login-wrap">
-                  <span class="btn-login" :class="{'isClick':forbidBtn}" disabled='forbidBtn' @click="register">注 册</span>
+                  <span class="btn-login" :class="{'isClick':forbidBtn}" disabled='forbidBtn'>注 册</span>
               </div>
           </div>
         </modal>
@@ -142,26 +142,26 @@ export default{
       this.checkLogin();
     },
     methods:{
-        register(){
-          if(this.vPwd=='' || this.vRepPwd=='' || this.vName =='') {
-            return;
-          }
-          axios.post("/users/register",{
-            userName:this.vName,
-            userPwd:this.vPwd
-          }).then((response)=>{
-            let res = response.data;
-            if(res.status == "0"){
-              this.registerModalFlag = false;
-              this.vName = '';
-              this.vPwd = '';
-              this.vRepPwd = '';
-              this.userName = res.result.userName;
-              this.userPwd = res.result.userPwd;
-              this.login();
-            }
-          })
-        },
+        // register(){
+        //   if(this.vPwd=='' || this.vRepPwd=='' || this.vName =='') {
+        //     return;
+        //   }
+        //   axios.post("/users/register",{
+        //     userName:this.vName,
+        //     userPwd:this.vPwd
+        //   }).then((response)=>{
+        //     let res = response.data;
+        //     if(res.status == "0"){
+        //       this.registerModalFlag = false;
+        //       this.vName = '';
+        //       this.vPwd = '';
+        //       this.vRepPwd = '';
+        //       this.userName = res.result.userName;
+        //       this.userPwd = res.result.userPwd;
+        //       this.login();
+        //     }
+        //   })
+        // },
         login(){
             if(!this.userName || !this.userPwd){
                 this.errorTip = true;
@@ -189,6 +189,8 @@ export default{
           axios.post("/users/logout").then((response) =>{
             let res = response.data;
             if(res.status =="0"){
+              this.userName = '';
+              this.userPwd = '';
               this.$store.commit("updateUserInfo","");
               this.$store.commit("initCartCount",0)
               this.$router.push("/")

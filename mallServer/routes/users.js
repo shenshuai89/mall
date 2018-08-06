@@ -13,14 +13,43 @@ router.get('/', function(req, res, next) {
 router.get('/test', function(req, res, next) {
   res.send('访问子路由users/test');
 });
+router.post("/queryPhone", function(req,res,next){
+  var phone = req.body.phone;
+  console.log(phone);
+  User.findOne({"phone":phone},function(err,doc){
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+      })
+    }else{
+      if(doc){
+        res.json({
+          status:'0',
+          msg:'',
+          result:'该号码已经注册'
+        })
+      }else{
+        res.json({
+          status:'0',
+          msg:'',
+          result:''
+        })
+      }
+      
+    }
+  })
+})
 // 注册新用户
 router.post("/register", function (req,res,next) {
   var userName = req.body.userName,
-      userPwd = req.body.userPwd;
+      userPwd = req.body.userPwd,
+      phone = req.body.phone;
   var doc1 = new User({
     "userId":new Date().getTime(),
     "userName":userName,
     "userPwd":userPwd,
+    "phone":phone,
     "level":3,
     "cartList":[],
     "addressList":[],
