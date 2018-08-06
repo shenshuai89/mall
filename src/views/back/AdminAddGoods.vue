@@ -250,7 +250,7 @@
         right: 0px;
         top: 0px;
         opacity: 0;
-        -ms-filter: 'alpha(opacity=0)';
+        filter: 'alpha(opacity=0)';
         font-size: 200px;
     }
     .show_image{

@@ -168,7 +168,7 @@
                     if(res.status == "0"){
                         this.errorTip = false;
                         this.loginModalFlag = false;
-                        this.$router.push("/")
+                        res.result.level == 1 ? this.$router.push("/admin") : this.$router.push("/")
                         this.$store.commit("updateUserInfo",this.userName);
                         // this.getCartCount();
                     }else{

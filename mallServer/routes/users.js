@@ -21,7 +21,7 @@ router.post("/register", function (req,res,next) {
     "userId":new Date().getTime(),
     "userName":userName,
     "userPwd":userPwd,
-    "level":1,
+    "level":3,
     "cartList":[],
     "addressList":[],
     "orderList":[]

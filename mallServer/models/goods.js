@@ -12,5 +12,5 @@ var productSchema = new Schema({
     "stock":Number
 })
 
-// mongoose.model("Goods", productSchema),可以和mongodb数据的goods集合相对应
+// mongoose.model("Goods", productSchema),
 module.exports = mongoose.model("Goods", productSchema)
