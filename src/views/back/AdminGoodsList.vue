@@ -7,6 +7,7 @@
                     <th>名称</th>
                     <th>价格</th>
                     <th>库存</th>
+                    <th>编辑</th>
                 </tr>
             </thead>
             <tr v-for="item in tableData" class="item_list">
@@ -16,6 +17,10 @@
                 <td>{{item.productName}}</td>
                 <td>{{item.salePrice}}</td>
                 <td>{{item.stock}}</td>
+                <!-- 通过params传参,在子页面通过{{$route.params.id}}接收 -->
+                <td><router-link :to="{name:'AdminEditGoods', params:{productId:item.productId}}">编辑商品</router-link></td>
+                <!-- 通过query传参,在子页面通过{{$route.query.id}}接收 -->
+                <!-- <td><router-link :to="{path:'/admin/editGoods', query:{productId:item.productId}}">编辑商品</router-link></td> -->
             </tr>
             <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
                 <img v-if="loading" src="../../assets/loading-spinning-bubbles.svg" title="加载中" />
@@ -62,12 +67,12 @@
                         if(isAddData){
                         // concat连接数组  push给数组加元素
                         this.tableData = this.tableData.concat(res.result.list)
-                            if(res.result.count == 0){
-                                this.busy = true
-                                this.isShowLoading = false;
-                            }else{
-                                this.busy = false
-                            }
+                        if(res.result.count == 0){
+                            this.busy = true
+                            this.isShowLoading = false;
+                        }else{
+                            this.busy = false
+                        }
                         }else{
                             this.tableData = res.result.list;
                             this.busy = false;

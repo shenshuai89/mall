@@ -59,7 +59,7 @@ export default new Router({
         { path: '', redirect:'goodsList' },
         { path: 'goodsList', name:"AdminGoodsList",component: AdminGoodsList },
         { path: 'addGoods', name:"AdminAddGoods",component: AdminAddGoods },
-        { path: 'editGoods', name:"AdminEditGoods",component: AdminEditGoods },
+        { path: 'editGoods/:productId', name:"AdminEditGoods",component: AdminEditGoods },
       ]
     }
   ]

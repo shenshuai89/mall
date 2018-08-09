@@ -255,7 +255,7 @@
               }, 2000)
             },
             onShadowChange (ids, names) {
-              console.log(names.join(''))
+              // console.log(names.join(''))
               this.provinceCityDistrict = names.join('');
             },
             changeData () {
@@ -268,7 +268,6 @@
               return value2name(value, ChinaAddressV4Data)
             },
             logHide (str) {
-              console.log('on-hide', str)
               console.log(this.addressValue );
             },
             logShow (str) {

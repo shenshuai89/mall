@@ -16,9 +16,12 @@
             </div>
         
             <div class="order-create">
-            <div class="order-create-pic"><img src="../../static/ok-2.png" alt=""></div>
+            <div class="order-create-pic">
+                <img v-if="orderStatus==1" src="../../static/success.png" alt="">
+                <img v-if="orderStatus==0" src="../../static/fail.png" alt=""></div>
             <div class="order-create-main">
-                <h3>恭喜您! <br>你的订单已经提交成功！</h3>
+                <h3><span v-if="orderStatus==1">恭喜您! <br>你的订单已经提交成功！</span>
+                <span v-if="orderStatus==0">很遗憾! <br>你的订单提交失败，请稍后重试。</span></h3>
                 <p>
                 <span>订单ID：{{orderId}}</span>
                 <span>订单总金额：{{orderTotal | currency('￥')}}</span>
@@ -50,7 +53,8 @@
         data(){
             return{
                 orderId:'',
-                orderTotal:0
+                orderTotal:0,
+                orderStatus:''
             }
         },
         mounted () {
@@ -68,6 +72,7 @@
                     if(res.status == "0"){
                         this.orderId = res.result.orderId;
                         this.orderTotal = res.result.orderTotal;
+                        this.orderStatus = res.result.orderStatus;
                     }
                 })
             }

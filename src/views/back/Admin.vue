@@ -6,7 +6,7 @@
               <template slot="title"><i class="el-icon-menu"></i>商品管理</template>
                 <el-menu-item index="1-1"><router-link to="/admin/goodsList" tag="span"><i class="el-icon-view"></i>查看商品</router-link></el-menu-item>
                 <el-menu-item index="1-2"><router-link to="/admin/addGoods" tag="span"><i class="el-icon-plus"></i>添加商品</router-link></el-menu-item>
-                <el-menu-item index="1-3"><i class="el-icon-edit-outline"></i>编辑商品</el-menu-item>
+                <!-- <el-menu-item index="1-3"><router-link to="/admin/editGoods" tag="span"><i class="el-icon-edit-outline"></i>编辑商品</router-link></el-menu-item> -->
             </el-submenu>
             <el-submenu index="2">
                 <template slot="title"><i class="el-icon-menu"></i>销售管理</template>

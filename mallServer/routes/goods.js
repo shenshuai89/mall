@@ -97,59 +97,6 @@ router.get('/', function(req,res,next){
         })
     }
 })
-router.post("/addGood", function(req,res, next){
-    var userId = req.cookies.userId,
-    productName = req.body.productName,
-    salePrice = req.body.salePrice,
-    stock = req.body.stock,
-    procductImage = req.body.procductImage;
-
-    User.findOne({userId:userId}, function(err, userDoc){
-        if(err){
-            res.json({
-                status:"1",
-                msg:err.message
-            })
-        }else{
-            if(userDoc){
-                // 将base64转jpg图片
-                var picName = productName+"_"+Date.now();
-                var path = 'public/images/'+ picName +'.jpg';
-                var base64 = procductImage.replace(/^data:image\/\w+;base64,/, "");//去掉图片base64码前面部分data:image/png;base64
-                var dataBuffer = new Buffer(base64, 'base64'); //把base64码转成buffer对象，
-                fs.writeFile(path,dataBuffer,function(err){//用fs写入文件
-                    if(err){
-                        console.log(err);
-                    }else{
-                        console.log('写入成功！');
-                    }
-                })
-                var newGoods = new Goods({
-                    "productId":new Date().getTime(),
-                    "productName":productName,
-                    "salePrice":salePrice,
-                    "stock":stock,
-                    "productImage":picName+".jpg",
-                    "checked":1
-                })
-                newGoods.save(function (error,doc) {
-                    if(error){
-                        res.json({
-                            status:"1",
-                            msg:error.message
-                        })
-                    }else{
-                        res.json({
-                            status:0,
-                            msg:"添加商品成功",
-                            result:doc
-                        })
-                    }
-                })
-            }
-        }
-    })
-})
 
 // 设置添加购物车的路由
 // 加入到购物车
@@ -236,4 +183,106 @@ router.post("/addCart", function(req,res,next){
     })
 })
 
+
+// 后台管理员添加商品
+router.post("/addGood", function(req,res, next){
+    var userId = req.cookies.userId,
+    productName = req.body.productName,
+    salePrice = req.body.salePrice,
+    stock = req.body.stock,
+    procductImage = req.body.procductImage;
+
+    User.findOne({userId:userId}, function(err, userDoc){
+        if(err){
+            res.json({
+                status:"1",
+                msg:err.message
+            })
+        }else{
+            if(userDoc){
+                // 将base64转jpg图片
+                var picName = productName+"_"+Date.now();
+                var path = 'public/images/'+ picName +'.jpg';
+                var base64 = procductImage.replace(/^data:image\/\w+;base64,/, "");//去掉图片base64码前面部分data:image/png;base64
+                var dataBuffer = new Buffer(base64, 'base64'); //把base64码转成buffer对象，
+                fs.writeFile(path,dataBuffer,function(err){//用fs写入文件
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log('写入成功！');
+                    }
+                })
+                var newGoods = new Goods({
+                    "productId":new Date().getTime(),
+                    "productName":productName,
+                    "salePrice":salePrice,
+                    "stock":stock,
+                    "productImage":picName+".jpg",
+                    "checked":1
+                })
+                newGoods.save(function (error,doc) {
+                    if(error){
+                        res.json({
+                            status:"1",
+                            msg:error.message
+                        })
+                    }else{
+                        res.json({
+                            status:0,
+                            msg:"添加商品成功",
+                            result:doc
+                        })
+                    }
+                })
+            }
+        }
+    })
+})
+
+// 编辑之前查询商品信息
+router.post("/queryGoods",function(req, res, next){
+    var userId = req.cookies.userId,
+    productId = req.body.productId;
+    if(userId){
+        Goods.findOne({"productId":productId},function (err,doc) {
+            if(err){
+                res.json({
+                    status:1,
+                    msg:err.message
+                })
+            }else{
+                res.json({
+                    status:0,
+                    msg:"find one goods",
+                    result:doc
+                })
+            }
+        })
+    }
+})
+// 后台管理编辑商品
+router.post("/editGoods", function(req,res,next){
+    var userId = req.cookies.userId,
+    productId = req.body.productId,
+    salePrice = req.body.salePrice,
+    stock = req.body.stock;
+    if(userId){
+        Goods.update({"productId":productId},{
+            salePrice,stock
+        },function(err,doc){
+            if(err){
+                res.json({
+                    status:1,
+                    msg:err.message
+                })
+            }else{
+                res.json({
+                    status:0,
+                    msg:"修改成功",
+                    result:"update success"
+                })
+            }
+        })
+    }
+})
 module.exports = router;

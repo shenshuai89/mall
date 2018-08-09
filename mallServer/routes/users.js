@@ -581,11 +581,12 @@ router.get("/orderDetail", function(req, res, next){
         result:''
       })
     }else{
-      var orderTotal = 0;
+      var orderTotal = 0,orderStatus='';
       if(doc.orderList.length>0){
         doc.orderList.forEach(item => {
           if(item.orderId == orderId){
             orderTotal = item.orderTotal
+            orderStatus = item.orderStatus
           }
         })
         res.json({
@@ -593,6 +594,7 @@ router.get("/orderDetail", function(req, res, next){
           msg:'',
           result:{
             orderId:orderId,
+            orderStatus:orderStatus,
             orderTotal:orderTotal
           }
         })

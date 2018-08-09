@@ -256,9 +256,10 @@
                         obj.productNum++;
                         if(obj.productNum>obj.stock){
                             obj.productNum = obj.stock;
+                            this.isShowAddMd = true;
+                            return;
                         }
-                        this.isShowAddMd = true;
-                        return;
+                        
                         this.$store.commit("updateCartCount",1)
                         break;
                     case "reduce":

@@ -37,7 +37,7 @@
                   <li v-for="(item,index) in cartList">
                     <div class="cart-tab-1">
                       <div class="cart-item-pic">
-                        <img :src="'/static/'+item.productImage" alt="item.productName">
+                        <img :src="'http://localhost:3000/static/images/'+item.productImage" alt="item.productName">
                       </div>
                       <div class="cart-item-title">
                         <div class="item-name">{{item.productName}}</div>

@@ -15,7 +15,7 @@
                     <table width='100%' border="0" class="goodsList">
                         <tr><th></th><th>商品名称</th><th>商品数量</th><th>商品金额</th></tr>
                         <tr v-for="goods in item.goodsList">
-                            <td>    <img :src="'/static/'+goods.productImage" alt=""></td>
+                            <td>    <img :src="'http://localhost:3000/static/images/'+goods.productImage" alt=""></td>
                             <td class="name"> 
                                 {{goods.productName}}</td>
                             <td>
@@ -42,7 +42,7 @@
                         <table width='100%' border="0" class="goodsList">
                             <tr><th></th><th>商品名称</th><th>商品数量</th><th>商品金额</th></tr>
                             <tr v-for="goods in item.goodsList">
-                                <td>    <img :src="'/static/'+goods.productImage" alt=""></td>
+                                <td>    <img :src="'http://localhost:3000/static/images/'+goods.productImage" alt=""></td>
                                 <td class="name"> 
                                     {{goods.productName}}</td>
                                 <td>
@@ -117,7 +117,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     h3{
         font-size: 24px;
         margin: 20px 0;
@@ -139,9 +139,6 @@
     }
     tr th{
         color:#999;
-    }
-    tr td{
-        height: 120px;
     }
     tr td img{
         width: 100px;
