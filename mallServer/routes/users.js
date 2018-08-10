@@ -1,10 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var User = require("../models/user")
+var Goods = require("../models/goods")
 var session = require("express-session")
 var cookie = require("cookie-parser")
 require("../util/util")
 
+
+var allGoods=[];
+Goods.find({},function (err, doc) {
+  if(!err){
+    allGoods = doc;
+  }
+})
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -15,7 +23,6 @@ router.get('/test', function(req, res, next) {
 });
 router.post("/queryPhone", function(req,res,next){
   var phone = req.body.phone;
-  console.log(phone);
   User.findOne({"phone":phone},function(err,doc){
     if(err){
       res.json({
@@ -77,8 +84,6 @@ router.post("/login",function(req,res,next){
     userName: req.body.userName,
     userPwd : req.body.userPwd
   }
-  // console.log("user login",params.userName);
-  // console.log("user login",params.userPwd);
   User.findOne(params, function(err, doc){
     if(err){
       res.json({
@@ -444,6 +449,7 @@ router.post("/delAddress", function (req, res, next) {
 router.post("/payment", function(req, res, next){
   var userId = req.cookies.userId,
       orderTotal = req.body.orderTotal,
+      stock = req.body.stock,
       addressId = req.body.addressId;
   User.findOne({"userId":userId}, function (err,doc) { 
     if(err){
@@ -473,9 +479,18 @@ router.post("/payment", function(req, res, next){
           goodsList.push(item);
         }
       })
+      // 如果购物车选择的商品的数量大于商品库存，则订单状态为0(失败)
+      for(var i=0;i<goodsList.length;i++){
+        for(var j=0;j<allGoods.length;j++){
+          if(goodsList[i].productId == allGoods[j].productId && goodsList[i].stock > allGoods[j].stock){
+            orderStatus == 0;
+          }
+        }
+      }
       var order = {
         orderId:orderId,
         orderTotal:orderTotal,
+        stock:stock,
         addressInfo:address,
         goodsList:goodsList,
         orderStatus:orderStatus,
@@ -484,6 +499,7 @@ router.post("/payment", function(req, res, next){
       doc.orderList.unshift(order);
 
       if(orderStatus=='1'){
+        // 订单成功，购物车删除勾选的商品
         for(var i = 0;i<doc.cartList.length;i++){
           for(var j=0;j<goodsList.length;j++){
             if(goodsList[j].productId == doc.cartList[i].productId){
@@ -505,7 +521,7 @@ router.post("/payment", function(req, res, next){
             msg:'success',
             result:{
               orderId:order.orderId,
-              orderTotal:order.orderTotal
+              orderTotal:order.orderTotal,
             }
           })
         }

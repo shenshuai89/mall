@@ -121,8 +121,10 @@
                 shipping:0,
                 discount:200,
                 tax:166,
+                sumNumber:0,
                 sumTotal:0,
-                orderTotal:0
+                orderTotal:0,
+                allGoods:[]
             }
         },
         components:{
@@ -130,6 +132,7 @@
         },
         mounted(){
             this.getCartItem();
+            this.getAllGoods();
         },
         methods: {
             getCartItem(){
@@ -141,21 +144,44 @@
                     })
                     this.cartList.forEach(item =>{
                         this.sumTotal += item.salePrice*item.productNum;
+                        this.sumNumber += item.productNum;
                     })
                     this.orderTotal = this.sumTotal +this.shipping+this.tax -this.discount;
                 })
+            },
+            getAllGoods(){
+              axios.get("/goods",{params:{}}).then(response => {
+                let res = response.data;
+                this.allGoods = res.result.list;
+              })
             },
             payment(){
                 var addressId = this.$route.query.addressId;
                 axios.post("/users/payment",{
                     "addressId":addressId,
-                    "orderTotal":this.orderTotal
+                    "orderTotal":this.orderTotal,
+                    "stock":this.sumNumber
                 }).then(response => {
                     let res = response.data;
                     if(res.status == "0"){
                         this.$router.push("/orderSuccess?orderId="+res.result.orderId)
                     }
                 })
+
+                for(var i=0;i<this.cartList.length;i++){
+                  for(var j=0;j<this.allGoods.length;j++){
+                    if(this.cartList[i].productId == this.allGoods[j].productId){
+                      axios.post("/goods/reduceStock",{
+                        "productNum":this.cartList[i].productNum,
+                        "productId":this.cartList[i].productId
+                      }).then(response => {
+                        let res = response.data;
+                        console.log(res);
+                      })
+                    }
+                  }
+                }
+                
             }
         }
     }

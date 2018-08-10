@@ -97,7 +97,6 @@
                 axios.get("/users/orderList").then(response => {
                     let res = response.data;
                     if(res.status == '0'){
-                        console.log("object", res.result);
                         this.orderList = res.result;
                     }
                 })

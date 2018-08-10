@@ -31,6 +31,7 @@ var userSchema = new mongoose.Schema({
         {
             "orderId":String,
             "orderTotal":Number,
+            "stock":Number, 
             "orderStatus":String,
             "createDate":String,
             "goodsList":Array,

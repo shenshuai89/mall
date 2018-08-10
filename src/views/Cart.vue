@@ -166,11 +166,13 @@
                 productId:'',
                 productNum:0,
                 isShowReduceMd:false,
-                isShowAddMd:false
+                isShowAddMd:false,
+                allGoods:[]
             }
         },
         mounted () {
-            this.init()
+            this.init();
+            this.getGoods();
         },
         computed:{
             nickName(){
@@ -200,6 +202,16 @@
             // currency:currency
         },
         methods:{
+            getGoods(){
+                axios.get("/goods",{
+                    params:{}
+                }).then((response)=>{
+                    var res = response.data;
+                    if(res.status == "0"){
+                        this.allGoods = res.result.list;
+                    }
+                })
+            },
             login(){
                 if(!this.userName || !this.userPwd){
                     this.errorTip = true;
@@ -248,18 +260,21 @@
                 })
             },
             editCart(params,obj){
+                var stockNum;
+                this.allGoods.forEach((item)=>{
+                    item.productId == obj.productId ? stockNum = item.stock:''
+                })
                 switch(params){
                     case "checked":
                         obj[params] = obj[params] == 0 ? 1 : 0;
                         break;
                     case "add":
                         obj.productNum++;
-                        if(obj.productNum>obj.stock){
-                            obj.productNum = obj.stock;
+                        if(obj.productNum>stockNum){
+                            obj.productNum = stockNum;
                             this.isShowAddMd = true;
                             return;
                         }
-                        
                         this.$store.commit("updateCartCount",1)
                         break;
                     case "reduce":

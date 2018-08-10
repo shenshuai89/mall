@@ -285,4 +285,36 @@ router.post("/editGoods", function(req,res,next){
         })
     }
 })
+// 订单支付后，库存减少
+router.post("/reduceStock", function (req,res,next) {
+    var userId = req.cookies.userId,
+    productNum = req.body.productNum,
+    productId = req.body.productId,
+    remainStock;
+    if(userId){
+        Goods.findOne({"productId":productId}, function(err, doc){
+            if(!err){
+                remainStock = doc.stock-productNum;
+                
+                Goods.update({"productId":productId},{
+                    "stock":remainStock
+                },function(err,doc){
+                    if(err){
+                        res.json({
+                            status:1,
+                            msg:err.message
+                        })
+                    }else{
+                        res.json({
+                            status:0,
+                            msg:"修改成功",
+                            result:"update success"
+                        })
+                    }
+                })
+            }
+        })
+        
+    }
+})
 module.exports = router;
