@@ -624,4 +624,28 @@ router.get("/orderDetail", function(req, res, next){
     }
   })
 })
+
+// 后台查询所有订单
+router.get("/allOrderList", function(req,res,next){
+  User.find({}, function (err, doc) {
+    if(err){
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    }else{
+      var allLists=[];
+      doc.forEach(item => {
+        item.orderList.length==0 ? "":allLists.push(item.orderList)
+      })
+      res.json({
+        status:'0',
+        msg:'所有用户的所有订单',
+        result:allLists
+      })
+    }
+  })
+})
+
 module.exports = router;

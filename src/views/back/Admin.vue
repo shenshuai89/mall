@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-aside v-if="showAside" width="200px" style="background-color: rgb(238, 241, 246);position: fixed;top: 60px;">
-          <el-menu :default-openeds="['1']">
+          <el-menu :default-openeds="['1','2','3']">
             <el-submenu index="1">
               <template slot="title"><i class="el-icon-menu"></i>商品管理</template>
                 <el-menu-item index="1-1"><router-link to="/admin/goodsList" tag="span"><i class="el-icon-view"></i>查看商品</router-link></el-menu-item>
@@ -10,9 +10,9 @@
             </el-submenu>
             <el-submenu index="2">
                 <template slot="title"><i class="el-icon-menu"></i>销售管理</template>
-                  <el-menu-item index="2-1"><i class="el-icon-view"></i>所有订单</el-menu-item>
-                  <el-menu-item index="2-2"><i class="el-icon-close"></i>删除订单</el-menu-item>
-                  <el-menu-item index="2-3"><i class="el-icon-news"></i>订单分析</el-menu-item>
+                  <el-menu-item index="2-1"><router-link to="/admin/orderList" tag="span"><i class="el-icon-view"></i>所有订单</router-link></el-menu-item>
+                  <el-menu-item index="2-2"><router-link to="/admin/orderDel" tag="span"><i class="el-icon-close"></i>删除订单</router-link></el-menu-item>
+                  <el-menu-item index="2-3"><router-link to="/admin/orderChart" tag="span"><i class="el-icon-news"></i>订单分析</router-link></el-menu-item>
               </el-submenu>
             <el-submenu index="3">
                 <template slot="title"><i class="el-icon-menu"></i>员工管理</template>
@@ -25,7 +25,7 @@
         </el-aside>
         
         <el-container :style="{ marginLeft: (showAll==true ? 200:0 )+'px'}" style="overflow:hidden;">
-            <router-view></router-view>
+        <router-view></router-view>
 
         </el-container>
         <el-header style="text-align: right; font-size: 12px; width:100%; position: fixed;">
@@ -84,7 +84,6 @@
                 this.showAll = !this.showAll;
             },
             handleCommand(command){
-                console.log("object logout"+command);
                 switch(command){
                     case "logout":
                         axios.post("/users/logout").then((response) =>{

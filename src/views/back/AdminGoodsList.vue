@@ -15,10 +15,10 @@
                     <span v-if="!item.productImage">暂无图片</span>
                 </td>
                 <td>{{item.productName}}</td>
-                <td>{{item.salePrice}}</td>
+                <td>{{item.salePrice | currency("￥")}}</td>
                 <td>{{item.stock}}</td>
                 <!-- 通过params传参,在子页面通过{{$route.params.id}}接收 -->
-                <td><router-link :to="{name:'AdminEditGoods', params:{productId:item.productId}}">编辑商品</router-link></td>
+                <td><router-link :to="{name:'AdminEditGoods', params:{productId:item.productId}}" tag="button" class="btn btn--s btn--red">编辑商品</router-link></td>
                 <!-- 通过query传参,在子页面通过{{$route.query.id}}接收 -->
                 <!-- <td><router-link :to="{path:'/admin/editGoods', query:{productId:item.productId}}">编辑商品</router-link></td> -->
             </tr>
@@ -31,6 +31,7 @@
 </template>
 <script>
     import axios from 'axios';
+    import {currency} from "../../assets/util"
     export default{
         name:"adminGoodsList",
         data(){

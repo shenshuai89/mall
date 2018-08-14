@@ -317,4 +317,6 @@ router.post("/reduceStock", function (req,res,next) {
         
     }
 })
+
+
 module.exports = router;
