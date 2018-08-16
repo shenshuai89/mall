@@ -1,24 +1,6 @@
 <template>
     <div style="position: relative; top: 60px; margin: 20px;width: 100%;">
-        <table class="table is-striped is-hoverable is-bordered">
-            <thead> 
-                <tr>
-                    <th>订单编号</th>
-                    <th>创建时间</th>
-                    <th>商品数量</th>
-                    <th>收货地址</th>
-                    <th>订单状态</th>
-                </tr>
-            </thead>
-            <tr v-for="item in tableData" class="item_list">
-                <td>{{item.orderId}}</td>
-                <td>{{item.createDate}}</td>
-                <td>{{item.goodsList.length}}</td>
-                <td>{{item.addressInfo ? (item.addressInfo).split(",\n  ")[3].split(':')[1]:'地址有误'}}</td>
-                <td v-if="item.orderStatus == 0" style="color: red">{{item.orderStatus == 0 ? "失败":"成功"}}</td>
-                <td v-if="item.orderStatus == 1">{{item.orderStatus == 0 ? "失败":"成功"}}</td>
-            </tr>
-        </table>
+        可以查询出所有的level=3的用户，将用的等级改为level=2，则可以增加为员工
         <modal :mdShow="mdShow" @close="closeModal">
             <p slot="message">请先登录，否则无法使用此功能！</p>
             <div slot="btnGroup">

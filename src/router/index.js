@@ -14,6 +14,10 @@ import AdminEditGoods from '@/views/back/AdminEditGoods'
 import AdminOrderList from '@/views/back/AdminOrderList'
 import AdminOrderDel from '@/views/back/AdminOrderDel'
 import AdminOrderChart from '@/views/back/AdminOrderChart'
+import AdminUserList from '@/views/back/AdminUserList'
+import AdminAddUser from '@/views/back/AdminAddUser'
+import AdminDelUser from '@/views/back/AdminDelUser'
+import AdminEditUser from '@/views/back/AdminEditUser'
 
 Vue.use(Router)
 
@@ -66,6 +70,10 @@ export default new Router({
         { path: 'orderList', name:"AdminOrderList",component: AdminOrderList },
         { path: 'orderDel', name:"AdminOrderDel",component: AdminOrderDel },
         { path: 'orderChart', name:"AdminOrderChart",component: AdminOrderChart },
+        { path: 'userList', name:"AdminUserList",component: AdminUserList },
+        { path: 'addUser', name:"AdminAddUser",component: AdminAddUser },
+        { path: 'delUser', name:"AdminDelUser",component: AdminDelUser },
+        { path: 'editUser', name:"AdminEditUser",component: AdminEditUser },
       ]
     }
   ]

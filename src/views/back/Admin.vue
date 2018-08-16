@@ -16,10 +16,10 @@
               </el-submenu>
             <el-submenu index="3">
                 <template slot="title"><i class="el-icon-menu"></i>员工管理</template>
-                  <el-menu-item index="3-1"><i class="el-icon-view"></i>查看员工</el-menu-item>
-                  <el-menu-item index="3-2"><i class="el-icon-plus"></i>添加员工</el-menu-item>
-                  <el-menu-item index="3-3"><i class="el-icon-close"></i>删除员工</el-menu-item>
-                  <el-menu-item index="3-4"><i class="el-icon-edit-outline"></i>编辑员工</el-menu-item>
+                  <el-menu-item index="3-1"><router-link to="/admin/userList" tag="span"><i class="el-icon-view"></i>查看员工</router-link></el-menu-item>
+                  <el-menu-item index="3-2"><router-link to="/admin/addUser" tag="span"><i class="el-icon-plus"></i>添加员工</router-link></el-menu-item>
+                  <el-menu-item index="3-3"><router-link to="/admin/delUser" tag="span"><i class="el-icon-close"></i>删除员工</router-link></el-menu-item>
+                  <el-menu-item index="3-4"><router-link to="/admin/editUser" tag="span"><i class="el-icon-edit-outline"></i>编辑员工</router-link></el-menu-item>
               </el-submenu>
           </el-menu>
         </el-aside>

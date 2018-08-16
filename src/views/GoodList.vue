@@ -135,7 +135,8 @@
           page:this.page,
           pageSize:this.pageSize,
           sort:this.sortFlag ? 1 : -1,
-          priceRange:this.priceChecked
+          priceRange:this.priceChecked,
+          routePath:this.$route.path
         }
         this.loading = true;
         axios.get("/goods",{

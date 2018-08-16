@@ -26,12 +26,18 @@
                 <img v-if="loading" src="../../assets/loading-spinning-bubbles.svg" title="加载中" />
             </div>
         </table>
-        
+        <modal :mdShow="mdShow" @close="closeModal">
+            <p slot="message">{{modalMsg}}</p>
+            <div slot="btnGroup">
+                <a class="btn btn-m" @click="closeModal">关   闭</a>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
     import axios from 'axios';
     import {currency} from "../../assets/util"
+    import Modal from '@/components/Modal.vue'
     export default{
         name:"adminGoodsList",
         data(){
@@ -44,11 +50,16 @@
                 busy:true,
                 isFirstLoad:true,
                 loading:false,
-                isShowLoading:true
+                isShowLoading:true,
+                mdShow:false,
+                modalMsg:"请先登录，否则无法使用此功能！"
             }
         },
         mounted(){
             this.init()
+        },
+        components:{
+            Modal
         },
         methods: {
             init(isAddData){
@@ -56,7 +67,8 @@
                     page:this.page,
                     pageSize:this.pageSize,
                     sort:this.sortFlag ? 1 : -1,
-                    priceRange:this.priceChecked
+                    priceRange:this.priceChecked,
+                    routePath:this.$route.path
                 }
                 this.loading = true;
                 axios.get("/goods",{
@@ -80,6 +92,14 @@
                         }
                     }else{
                         this.tableData = []
+                        this.modalMsg = res.msg
+                        var _self = this;
+                        this.$alert(res.msg, '返回主页', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.$router.push("/")
+                            }
+                        });
                     }
                 })
             },
@@ -96,6 +116,9 @@
                     this.busy = true;
                 }, 200);
             },
+            closeModal(){
+                this.mdShow = false;
+            }
         }
     }
 </script>

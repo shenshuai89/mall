@@ -3,11 +3,19 @@
         <ve-line :data="chartData1" :colors="colors" width="800px" :settings="chartSettings"></ve-line>
         <ve-histogram :data="chartData2" width="800px" :colors="colors2" :settings="chart2Settings"></ve-histogram>
         <ve-map :data="chartData3"></ve-map>
+        <modal :mdShow="mdShow" @close="closeModal">
+            <p slot="message">请先登录，否则无法使用此功能！</p>
+            <div slot="btnGroup">
+                <a class="btn btn-m" @click="closeModal">关   闭</a>
+            </div>
+        </modal>
     </div>
 </template>
   
 <script>
-export default {
+    import axios from 'axios'
+    import Modal from '@/components/Modal.vue'
+    export default {
     name:"adminOrderChart",
     data(){
         this.chartSettings = {
@@ -15,6 +23,7 @@ export default {
             dimension: ['日期']
         }
         return {
+            mdShow:false,
             colors:['#c23531','#2f4554', '#61a0a8',
                 '#d48265', '#91c7ae','#749f83', 
                 '#ca8622', '#bda29a','#6e7074',
@@ -75,6 +84,27 @@ export default {
                     { '位置': '浙江', '下单数': 4123 }
                 ]
             }
+        }
+    },
+    mounted() {
+        this.init();
+    },
+    components:{
+        Modal
+    },
+    methods: {
+        init(){
+            axios.get("/users/checkLogin").then((response)=>{
+                let res = response.data;
+                if(res.status == 0){
+
+                }else{
+                    this.mdShow = true
+                }
+            })
+        },
+        closeModal(){
+            this.mdShow = false;
         }
     }
 }

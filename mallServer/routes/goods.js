@@ -27,13 +27,15 @@ var User = require('../models/user')
 
 
 router.get('/', function(req,res,next){
-    let page = parseInt(req.query.page);
-    let pageSize = parseInt(req.query.pageSize);
-    let priceRange = req.query.priceRange;
+    let page = parseInt(req.query.page) || '';
+    let pageSize = parseInt(req.query.pageSize) || '';
+    let priceRange = req.query.priceRange || '';
     let skip = (page-1)*pageSize;
-    let sort = req.query.sort;
+    let sort = req.query.sort || "";
+    let routePath = req.query.routePath || "";
     let params = { }
     var priceGt =0,priceLte=0;
+
     if(priceRange != "all"){
         switch(priceRange){
             case "0":
@@ -55,7 +57,66 @@ router.get('/', function(req,res,next){
         }
     }
     // console.log(req.query);    {page:"1",pageSize:"8",sort:"1"}
-    if(JSON.stringify(req.query) == "{}"){
+    if(routePath.indexOf("admin")>0 && !req.cookies.userId){
+        res.json({
+            status:"10001",
+            msg:"未登录，无法执行操作",
+            result:""
+        })
+    }else if(routePath.indexOf("admin")>0 && req.cookies.userId){
+        User.findOne({"userId":req.cookies.userId},function (err,user) {
+            if(user.level>2){
+                res.json({
+                    status:"10002",
+                    msg:"用户权限，无权限操作",
+                    result:""
+                })
+            }else{
+                if(JSON.stringify(req.query) == "{}"){
+                    Goods.find({}, function (err, doc) { 
+                        if(err){
+                            res.json({
+                                status:'1',
+                                msg:err.message
+                            })
+                        }else{
+                            res.json({
+                                status:'0',
+                                msg:'',
+                                result:{
+                                    count:doc.length,
+                                    list:doc
+                                }
+                            })
+                        }
+                    })
+                }else{
+                    // 分页
+                    let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
+                    // 排序
+                    goodsModel.sort({"salePrice":sort})
+                    goodsModel.exec(function (err, doc) { 
+                        if(err){
+                            res.json({
+                                status:'1',
+                                msg:err.message
+                            })
+                        }else{
+                            res.json({
+                                status:'0',
+                                msg:'',
+                                result:{
+                                    count:doc.length,
+                                    list:doc
+                                }
+                            })
+                        }
+                    })
+                }
+            }
+        })
+
+    }else if(JSON.stringify(req.query) == "{}"){
         Goods.find({}, function (err, doc) { 
             if(err){
                 res.json({
@@ -192,51 +253,60 @@ router.post("/addGood", function(req,res, next){
     stock = req.body.stock,
     procductImage = req.body.procductImage;
 
-    User.findOne({userId:userId}, function(err, userDoc){
-        if(err){
-            res.json({
-                status:"1",
-                msg:err.message
-            })
-        }else{
-            if(userDoc){
-                // 将base64转jpg图片
-                var picName = productName+"_"+Date.now();
-                var path = 'public/images/'+ picName +'.jpg';
-                var base64 = procductImage.replace(/^data:image\/\w+;base64,/, "");//去掉图片base64码前面部分data:image/png;base64
-                var dataBuffer = new Buffer(base64, 'base64'); //把base64码转成buffer对象，
-                fs.writeFile(path,dataBuffer,function(err){//用fs写入文件
-                    if(err){
-                        console.log(err);
-                    }else{
-                        console.log('写入成功！');
-                    }
+    if(!userId){
+        res.json({
+            status:"10001",
+            msg:"未登录，无法执行操作",
+            result:""
+        })
+    }else{
+        User.findOne({userId:userId}, function(err, userDoc){
+            if(err){
+                res.json({
+                    status:"1",
+                    msg:err.message
                 })
-                var newGoods = new Goods({
-                    "productId":new Date().getTime(),
-                    "productName":productName,
-                    "salePrice":salePrice,
-                    "stock":stock,
-                    "productImage":picName+".jpg",
-                    "checked":1
-                })
-                newGoods.save(function (error,doc) {
-                    if(error){
-                        res.json({
-                            status:"1",
-                            msg:error.message
-                        })
-                    }else{
-                        res.json({
-                            status:0,
-                            msg:"添加商品成功",
-                            result:doc
-                        })
-                    }
-                })
+            }else{
+                if(userDoc){
+                    // 将base64转jpg图片
+                    var picName = productName+"_"+Date.now();
+                    var path = 'public/images/'+ picName +'.jpg';
+                    var base64 = procductImage.replace(/^data:image\/\w+;base64,/, "");//去掉图片base64码前面部分data:image/png;base64
+                    var dataBuffer = new Buffer(base64, 'base64'); //把base64码转成buffer对象，
+                    fs.writeFile(path,dataBuffer,function(err){//用fs写入文件
+                        if(err){
+                            console.log(err);
+                        }else{
+                            console.log('写入成功！');
+                        }
+                    })
+                    var newGoods = new Goods({
+                        "productId":new Date().getTime(),
+                        "productName":productName,
+                        "salePrice":salePrice,
+                        "stock":stock,
+                        "productImage":picName+".jpg",
+                        "checked":1
+                    })
+                    newGoods.save(function (error,doc) {
+                        if(error){
+                            res.json({
+                                status:"1",
+                                msg:error.message
+                            })
+                        }else{
+                            res.json({
+                                status:0,
+                                msg:"添加商品成功",
+                                result:doc
+                            })
+                        }
+                    })
+                }
             }
-        }
-    })
+        })
+    }
+    
 })
 
 // 编辑之前查询商品信息
@@ -258,6 +328,12 @@ router.post("/queryGoods",function(req, res, next){
                 })
             }
         })
+    }else{
+        res.json({
+            status:"10001",
+            msg:"未登录，无法执行操作",
+            result:""
+        })
     }
 })
 // 后台管理编辑商品
@@ -267,21 +343,38 @@ router.post("/editGoods", function(req,res,next){
     salePrice = req.body.salePrice,
     stock = req.body.stock;
     if(userId){
-        Goods.update({"productId":productId},{
-            salePrice,stock
-        },function(err,doc){
-            if(err){
-                res.json({
-                    status:1,
-                    msg:err.message
+        User.findOne({"userId":userId},function (err,user) {
+            if(user.level<2){
+                Goods.update({"productId":productId},{
+                    salePrice,stock
+                },function(err,doc){
+                    if(err){
+                        res.json({
+                            status:1,
+                            msg:err.message
+                        })
+                    }else{
+                        res.json({
+                            status:0,
+                            msg:"修改成功",
+                            result:"update success"
+                        })
+                    }
                 })
             }else{
                 res.json({
-                    status:0,
-                    msg:"修改成功",
-                    result:"update success"
+                    status:"10002",
+                    msg:"用户权限，无权限操作",
+                    result:""
                 })
             }
+        })
+        
+    }else{
+        res.json({
+            status:"10001",
+            msg:"未登录，无法执行操作",
+            result:""
         })
     }
 })
@@ -314,7 +407,12 @@ router.post("/reduceStock", function (req,res,next) {
                 })
             }
         })
-        
+    }else{
+        res.json({
+            status:"10001",
+            msg:"未登录，无法执行操作",
+            result:""
+        })
     }
 })
 

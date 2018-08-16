@@ -150,7 +150,7 @@
                 })
             },
             getAllGoods(){
-              axios.get("/goods",{params:{}}).then(response => {
+              axios.get("/goods").then(response => {
                 let res = response.data;
                 this.allGoods = res.result.list;
               })

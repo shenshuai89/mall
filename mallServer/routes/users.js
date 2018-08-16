@@ -14,8 +14,18 @@ Goods.find({},function (err, doc) {
   }
 })
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.post('/userList', function(req, res, next) {
+  var userId = req.cookies.userId;
+  if(userId){
+    User.findOne({"userId":userId},function(err,doc){
+      if(doc.level == 1){
+        User.find({},function(err,users){
+          console.log(users);
+        })
+      }
+    })
+  }
+  User.find({})
 });
 
 router.get('/test', function(req, res, next) {
@@ -57,6 +67,12 @@ router.post("/register", function (req,res,next) {
     "userName":userName,
     "userPwd":userPwd,
     "phone":phone,
+    "gender":"",
+    "position":"",
+    "department":"",
+    "hiredate":new Date().Format('yyyy-MM-dd hh:mm:ss'),
+    "positionstatus":'',
+    "leavedate":"",
     "level":3,
     "cartList":[],
     "addressList":[],
@@ -542,8 +558,17 @@ router.post("/repayment", function(req,res,next){
             result:''
           })
         }else{
+          // 把所有订单都设置为状态为1
           doc.orderList.forEach(item => {
             if(item.orderId == orderId){
+              console.log("goodsList 订单的商品",item.goodsList);
+              for(var i=0;i<item.goodsList.length;i++){
+                for(var j=0;j<doc.cartList.length;j++){
+                  if(item.goodsList[i].productId == doc.cartList[j].productId){
+                    doc.cartList.splice(j,1);
+                  }
+                }
+              }
               item.orderStatus = '1';
             }
           })

@@ -203,9 +203,7 @@
         },
         methods:{
             getGoods(){
-                axios.get("/goods",{
-                    params:{}
-                }).then((response)=>{
+                axios.get("/goods").then((response)=>{
                     var res = response.data;
                     if(res.status == "0"){
                         this.allGoods = res.result.list;

@@ -30,6 +30,8 @@
               this.productName = res.result.productName;
               this.salePrice = res.result.salePrice;
               this.stock = res.result.stock;
+            }else{
+              console.log("object 无权操作");
             }
           })
         },

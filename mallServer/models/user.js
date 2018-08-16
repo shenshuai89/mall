@@ -4,6 +4,12 @@ var userSchema = new mongoose.Schema({
     "userId":String,
     "userName":String,
     "userPwd":String,
+    "gender":String,
+    "position":String,
+    "department":String,
+    "hiredate":String,
+    "positionstatus":String,
+    "leavedate":String,
     "phone":String,
     "level":Number,
     "cartList":[

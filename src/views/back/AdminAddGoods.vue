@@ -54,12 +54,18 @@
             <el-button type="success" @click="submit">确认添加</el-button>
             <el-button type="danger" @click="cancel">取消清空</el-button>
        </div>
-       
+       <modal :mdShow="mdShow" @close="closeModal">
+            <p slot="message">请先登录，否则无法使用此功能！</p>
+            <div slot="btnGroup">
+                <a class="btn btn-m" @click="closeModal">关   闭</a>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
     import axios from 'axios';
     import VueCropper from 'vue-cropper'
+    import Modal from '@/components/Modal.vue'
     export default{
         name:"adminGoodsList",
         components: {
@@ -92,46 +98,14 @@
                 },
                 cropImg:"",
                 crop:'',
-                imgSrc:""
+                imgSrc:"",
+                mdShow:false
             }
         },
-        mounted(){
-            // this.init()
+        components:{
+            Modal
         },
         methods: {
-            init(isAddData){
-                var params = {
-                    page:this.page,
-                    pageSize:this.pageSize,
-                    sort:this.sortFlag ? 1 : -1,
-                    priceRange:this.priceChecked
-                }
-                this.loading = true;
-                axios.get("/goods",{
-                    params:params
-                    }).then((response)=>{
-                    var res = response.data;
-                    this.loading = false;
-                    if(res.status == "0"){
-                        if(isAddData){
-                        // concat连接数组  push给数组加元素
-                        this.tableData = this.tableData.concat(res.result.list)
-                            if(res.result.count == 0){
-                                this.busy = true
-                                this.isShowLoading = false;
-                            }else{
-                                this.busy = false
-                            }
-                        }else{
-                            console.log(res.result.list);
-                            this.tableData = res.result.list;
-                            this.busy = false;
-                        }
-                    }else{
-                        this.tableData = []
-                    }
-                })
-            },
             setImage(e){
                 const file = e.target.files[0];
                 if(!file){
@@ -212,6 +186,8 @@
                                 });          
                                 this.$router.push("/admin/goodsList")
                         });
+                    }else{
+                        this.mdShow = true;
                     }
                 })
             },
@@ -220,8 +196,10 @@
                 this.priceValidateForm = {};
                 this.stockValidateForm = {};
                 this.cropImg = '';
+            },
+            closeModal(){
+                this.mdShow = false;
             }
-
         }
     }
 </script>

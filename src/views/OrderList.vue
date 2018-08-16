@@ -78,7 +78,8 @@
             NavHeader,NavFooter,NavBread,Modal
         },
         mounted () {
-            this.getOrderList()
+            this.getOrderList();
+            // console.log(new Date().Format("yyyy-MM-dd hh:mm:ss"));
         },
         computed: {
             successsOrder(){
@@ -101,6 +102,14 @@
                     }
                 })
             },
+            getCartCount(){
+                axios.get("/users/cartCount").then((response) => {
+                    let res = response.data;
+                    if(res.status == "0"){
+                    this.$store.commit("initCartCount",res.result)
+                    }
+                })
+            },
             repayment(orderId){
                 axios.post("/users/repayment",
                 {
@@ -110,6 +119,7 @@
                     let res = response.data;
                     if(res.status =="0"){
                         this.getOrderList();
+                        this.getCartCount();
                     }
                 })
             }
