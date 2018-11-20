@@ -1,8 +1,29 @@
 <template>
     <div style="position: relative; top: 60px; margin: 20px;width: 100%;">
-        可以查询出所有的level=3的用户，将用的等级改为level=2，则可以增加为员工
+        <table class="table is-striped is-hoverable is-bordered">
+            <thead> 
+                <tr>
+                    <th>用户名</th>
+                    <th>电话</th>
+                    <th>职位</th>
+                    <th>部门</th>
+                    <th>状态</th>
+                    <th>性别</th>
+                    <th>设为员工</th>
+                </tr>
+            </thead>
+            <tr v-for="item in tableData" class="item_list">
+                <td>{{item.userName}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.position}}</td>
+                <td>{{item.department}}</td>
+                <td>{{item.positionstatus}}</td>
+                <td>{{item.gender == "F" ? "男":"女"}}</td>
+                <td><router-link :to="{name:'AdminEditUser', params:{userId:item.userId}}" tag="button" class="btn btn--s btn--red">增设员工</router-link></td>
+            </tr>
+        </table>
         <modal :mdShow="mdShow" @close="closeModal">
-            <p slot="message">请先登录，否则无法使用此功能！</p>
+            <p slot="message">当前用户没有权限</p>
             <div slot="btnGroup">
                 <a class="btn btn-m" @click="closeModal">关   闭</a>
             </div>
@@ -28,16 +49,10 @@
         },
         methods: {
             init(isAddData){
-                axios.get("/users/allOrderList").then((response)=>{
+                axios.post("/users/addUser").then((response)=>{
                     var res = response.data;
                     if(res.status == 0){
-                        var arr = res.result,allArr=[];
-                        for(var i=0;i<arr.length;i++){
-                            for(var j=0;j<arr[i].length;j++){
-                                allArr.push(arr[i][j])
-                            }
-                        }
-                        this.tableData = allArr;
+                        this.tableData = res.result;
                     }else{
                         this.mdShow = true;
                     }

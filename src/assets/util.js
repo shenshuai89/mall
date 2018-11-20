@@ -34,6 +34,21 @@ export function getCookie(val){
   }
 }
 
+export function getFormatTime(d){
+    if(d.length<20) return null;
+    var str = '';
+    str = str.replace(/ GMT.+$/, ''); // Or str = str.substring(0, 24)
+    var a = [d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()];
+    for (var i = 0, len = a.length; i < len; i++) {
+      if (a[i] < 10) {
+        a[i] = '0' + a[i];
+      }
+    }
+    str = a[0] + '-' + a[1] + '-' + a[2] + ' '+a[3]+':'+a[4]+':'+a[5] ;  //年-月-日
+    return str;
+}
+
+
 Date.prototype.Format = function (fmt) {
   var o = {
     "M+": this.getMonth() + 1, //月份

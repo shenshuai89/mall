@@ -71,7 +71,8 @@
         name:"orderList",
         data(){
             return {
-                orderList:[]
+                orderList:[],
+                allGoods:[]
             }
         },
         components:{
@@ -79,6 +80,7 @@
         },
         mounted () {
             this.getOrderList();
+            this.getAllGoods();
             // console.log(new Date().Format("yyyy-MM-dd hh:mm:ss"));
         },
         computed: {
@@ -89,11 +91,19 @@
             },
             failOrder(){
                 return this.orderList.filter((item) =>{
-                    return item.orderStatus == '0'
+                    return item.orderStatus == '-1'
                 })
             }
         },
         methods: {
+            getAllGoods(){
+                axios.get("/goods").then(response => {
+                    let res = response.data;
+                    if(res.status == "0"){
+                        this.allGoods = res.result.list;
+                    }
+                })
+            },
             getOrderList(){
                 axios.get("/users/orderList").then(response => {
                     let res = response.data;
@@ -120,6 +130,34 @@
                     if(res.status =="0"){
                         this.getOrderList();
                         this.getCartCount();
+                        var goodsList =[];
+
+                        axios.get("/users/orderDetail",{
+                            params:{
+                                "orderId":orderId
+                            }
+                        }).then(response => {
+                            let res = response.data;
+                            if(res.status == "0"){
+                                goodsList = res.result.goodsList;
+                            }
+                        })
+
+                        // 提交成功后减少库存
+                        for(var i=0;i<goodsList.length;i++){
+                            for(var j=0; j<this.allGoods.length;j++){
+                                if(goodsList[i].productId == this.allGoods[j].productId){
+                                    axios.post("/goods/reduceStock",{
+                                        "productNum":this.cartList[i].productNum,
+                                        "productId":this.cartList[i].productId
+                                    }).then(response => {
+                                        let res = response.data;
+                                        console.log(res);
+                                    })
+                                }
+                            }
+                        }
+
                     }
                 })
             }

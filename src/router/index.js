@@ -73,6 +73,7 @@ export default new Router({
         { path: 'userList', name:"AdminUserList",component: AdminUserList },
         { path: 'addUser', name:"AdminAddUser",component: AdminAddUser },
         { path: 'delUser', name:"AdminDelUser",component: AdminDelUser },
+        { path: 'editUser/:userId', name:"AdminEditUser",component: AdminEditUser },
         { path: 'editUser', name:"AdminEditUser",component: AdminEditUser },
       ]
     }

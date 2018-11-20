@@ -1,7 +1,27 @@
 <template>
     <div style="position: relative; top: 60px; margin: 20px;width: 100%;">
-        level=1管理员可以查看所有用户员工
-        level=2只能查看自己的level=2的自己和level=3的所有客户
+        <table class="table is-striped is-hoverable is-bordered">
+            <thead> 
+                <tr>
+                    <th>用户名</th>
+                    <th>电话</th>
+                    <th>职位</th>
+                    <th>部门</th>
+                    <th>状态</th>
+                    <th>性别</th>
+                    <th>入职时间</th>
+                </tr>
+            </thead>
+            <tr v-for="item in tableData" class="item_list">
+                <td>{{item.userName}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.position}}</td>
+                <td>{{item.department}}</td>
+                <td>{{item.positionstatus}}</td>
+                <td >{{item.gender == "F" ? "男":"女"}}</td>
+                <td >{{item.hiredate}}</td>
+            </tr>
+        </table>
         <modal :mdShow="mdShow" @close="closeModal">
             <p slot="message">请先登录，否则无法使用此功能！</p>
             <div slot="btnGroup">
@@ -29,10 +49,10 @@
         },
         methods: {
             init(){
-                axios.post("/users/userList").then((response)=>{
+                axios.get("/users/userList").then((response)=>{
                     var res = response.data;
                     if(res.status == 0){
-                        console.log(res);
+                        this.tableData = res.result;
                     }else{
                         this.mdShow = true;
                     }

@@ -13,20 +13,6 @@ Goods.find({},function (err, doc) {
     allGoods = doc;
   }
 })
-/* GET users listing. */
-router.post('/userList', function(req, res, next) {
-  var userId = req.cookies.userId;
-  if(userId){
-    User.findOne({"userId":userId},function(err,doc){
-      if(doc.level == 1){
-        User.find({},function(err,users){
-          console.log(users);
-        })
-      }
-    })
-  }
-  User.find({})
-});
 
 router.get('/test', function(req, res, next) {
   res.send('访问子路由users/test');
@@ -482,7 +468,7 @@ router.post("/payment", function(req, res, next){
       var sysDate = new Date().Format('yyyyMMddhhmmss');
       var createDate = new Date().Format('yyyy-MM-dd hh:mm:ss')
       var orderId = platform + ''+r1+''+ sysDate + r2;
-      var orderStatus = Math.random()>0.3 ? '1':'0';
+      var orderStatus = Math.random()>0.3 ? '1':'-1';
 
       doc.addressList.forEach(item =>{
         if(addressId == item.addressId){
@@ -495,11 +481,11 @@ router.post("/payment", function(req, res, next){
           goodsList.push(item);
         }
       })
-      // 如果购物车选择的商品的数量大于商品库存，则订单状态为0(失败)
+      // 如果购物车选择的商品的数量大于商品库存，则订单状态为-1(失败)
       for(var i=0;i<goodsList.length;i++){
         for(var j=0;j<allGoods.length;j++){
           if(goodsList[i].productId == allGoods[j].productId && goodsList[i].stock > allGoods[j].stock){
-            orderStatus == 0;
+            orderStatus == -1;
           }
         }
       }
@@ -514,13 +500,11 @@ router.post("/payment", function(req, res, next){
       }
       doc.orderList.unshift(order);
 
-      if(orderStatus=='1'){
-        // 订单成功，购物车删除勾选的商品
-        for(var i = 0;i<doc.cartList.length;i++){
-          for(var j=0;j<goodsList.length;j++){
-            if(goodsList[j].productId == doc.cartList[i].productId){
-              doc.cartList.splice(i,1);
-            }
+      // 提交订单后，购物车删除勾选的商品
+      for(var i = 0;i<doc.cartList.length;i++){
+        for(var j=0;j<goodsList.length;j++){
+          if(goodsList[j].productId == doc.cartList[i].productId){
+            doc.cartList.splice(i,1);
           }
         }
       }
@@ -561,11 +545,11 @@ router.post("/repayment", function(req,res,next){
           // 把所有订单都设置为状态为1
           doc.orderList.forEach(item => {
             if(item.orderId == orderId){
-              console.log("goodsList 订单的商品",item.goodsList);
               for(var i=0;i<item.goodsList.length;i++){
                 for(var j=0;j<doc.cartList.length;j++){
                   if(item.goodsList[i].productId == doc.cartList[j].productId){
                     doc.cartList.splice(j,1);
+                    console.log(item.goodsList[i].productNum); 
                   }
                 }
               }
@@ -584,7 +568,7 @@ router.post("/repayment", function(req,res,next){
               res.json({
                 status:'0',
                 msg:'success',
-                result:doc.orderList
+                result:orderId
               })
             }
           })
@@ -622,12 +606,13 @@ router.get("/orderDetail", function(req, res, next){
         result:''
       })
     }else{
-      var orderTotal = 0,orderStatus='';
+      var orderTotal = 0,orderStatus='',goodsList=[];
       if(doc.orderList.length>0){
         doc.orderList.forEach(item => {
           if(item.orderId == orderId){
             orderTotal = item.orderTotal
             orderStatus = item.orderStatus
+            goodsList = item.goodsList
           }
         })
         res.json({
@@ -636,7 +621,8 @@ router.get("/orderDetail", function(req, res, next){
           result:{
             orderId:orderId,
             orderStatus:orderStatus,
-            orderTotal:orderTotal
+            orderTotal:orderTotal,
+            goodsList:goodsList
           }
         })
       }else{
@@ -672,5 +658,197 @@ router.get("/allOrderList", function(req,res,next){
     }
   })
 })
+
+// 后台管理员添加用户
+router.post('/addUser', function(req, res, next) {
+  var userId = req.cookies.userId;
+  if(userId){
+    User.findOne({"userId":userId},function(err,doc){
+      if(err){
+        res.json({
+          status:1,
+          msg:err.message,
+          result:''
+        })
+      }else if(doc.level == 1){
+        User.find({},function(err,users){
+          res.json({
+            status:0,
+            msg:'查询出所有用户',
+            result:users.filter(item => {
+              return item.level == 3;
+            })
+          })
+        })
+      }else{
+        res.json({
+          status:10002,
+          msg:'当前账户无操作权限'
+        })
+      }
+    })
+  }
+});
+// 后台查询所有用户
+router.get("/userList", function(req, res, next){
+  var userId = req.cookies.userId;
+  if(userId){
+    var allUsers = [];
+    User.find({userId:userId}, function(err,doc){
+      if(err){
+        res.json({
+          status:'1',
+          msg:err.message
+        })
+      }else{
+        if(doc[0].level == 1){
+          User.find({},function(err,users){
+            var level3Users = users.filter(item => {
+              return item.level != 3;
+            })
+            res.json({
+              status:0,
+              msg:'',
+              result:level3Users
+            })
+          })
+        }else{
+          res.json({
+            status:0,
+            msg:'',
+            result:doc
+          })
+        }
+      }
+    })
+  }
+})
+// 后台查询所有员工
+router.get("/workerList", function(req, res, next){
+  var userId = req.cookies.userId;
+  if(userId){
+    var allUsers = [];
+    User.find({userId:userId}, function(err,doc){
+      if(err){
+        res.json({
+          status:'1',
+          msg:err.message
+        })
+      }else{
+        if(doc[0].level == 1){
+          User.find({},function(err,users){
+            res.json({
+              status:0,
+              msg:'',
+              result:users.filter(item => {
+                return item.level == 2;
+              })
+            })
+          })
+        }else{
+          res.json({
+            status:10003,
+            msg:'当前用户没有权限！',
+            result:"当前用户没有权限！"
+          })
+        }
+      }
+    })
+  }
+})
+
+// 后台查询当前员工的一些信息
+router.post("/queryUser",function(req,res,next){
+  var userId = req.cookies.userId,
+    queryUserId = req.body.userId;
+    User.findOne({"userId":queryUserId}, function (err,user) {
+      if(err){
+        res.json({
+          status:1,
+          msg:err.message
+        })
+      }else{
+        res.json({
+          status:0,
+          msg:'查询用户信息',
+          result:user
+        })
+      }
+    })
+})
+
+
+// 后台添加员工
+router.post("/editUser",function(req,res,next){
+  var userId = req.body.userId,
+  userName = req.body.userName,
+  phone = req.body.phone,
+  gender = req.body.gender,
+  hiredate = req.body.hiredate,
+  department = req.body.department,
+  position = req.body.position,
+  positionstatus = req.body.positionstatus;
+  User.update({"userId":userId}, {$set:{
+    userName,
+    phone,
+    gender,
+    hiredate,
+    department,
+    position,
+    positionstatus,
+    "level":2
+  }},function (err,doc) {
+    if(err){
+      res.json({
+        status:1,
+        msg:err.message
+      })
+    }else{
+      res.json({
+        status:0,
+        msg:"更新成功",
+        result:doc
+      })
+    }
+  })
+})
+
+// 删除员工，将员工的level改为3
+router.post("/delUser",function(req,res,next){
+  var userId = req.cookies.userId,
+  delUser = req.body.userId;
+  User.findOne({"userId":userId},function (err, user) {
+    if(err){
+      res.json({
+        status:1,
+        msg:err.message
+      })
+    }else{
+      if(user.level==1){
+        User.update({"userId":delUser},{$set:{"level":3,
+        "position":'',
+        "department":'',
+        "position":'',
+        "positionstatus":''
+      }},function(err1,doc){
+          if(err1){
+            res.json({
+              status:1,
+              msg:err1.message
+            })
+          }else{
+            res.json({
+              status:0,
+              msg:'update success',
+              result:"更新成功"
+            })
+          }
+        })
+      }
+      
+    }
+  })
+})
+
 
 module.exports = router;
