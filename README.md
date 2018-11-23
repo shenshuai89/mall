@@ -5,6 +5,7 @@
 ## 项目的启动
 
 1首先启动本地的mongodb数据库。在安装mongodb程序目录bin下，运行mongo
+
 2切换到mallServer目录下，运行后台程序，执行命令
 ``` bash
 npm start
@@ -22,6 +23,7 @@ npm run dev
 
 - data:mongodb数据库需要的文件，可以使用mongoimport导入
 - preview:项目启动后的预览效果图
+
 
 * 首页 ![首页](preview/首页.png)
 * 注册 ![注册](preview/注册.png)
