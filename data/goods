@@ -1,0 +1,18 @@
+{"_id":{"$oid":"5b642385e887595a3cf388f3"},"productId":"1533289349330","productName":"小米笔记本","salePrice":3549,"stock":58,"productImage":"小米笔记本_1533289349328.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b6424b7e887595a3cf388f4"},"productId":"1533289655085","productName":"小米6X","salePrice":1599,"stock":6,"productImage":"小米6X_1533289655082.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b6425e1e887595a3cf388f5"},"productId":"1533289953429","productName":"小米电视4A 55英寸","salePrice":2799,"stock":1,"productImage":"小米电视4A 55英寸_1533289953428.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b6426f1e887595a3cf388f6"},"productId":"1533290225921","productName":"旅行自拍杆","salePrice":29.9,"stock":47,"productImage":"旅行自拍杆_1533290225920.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b64282be887595a3cf388f7"},"productId":"1533290539545","productName":"智能插线板","salePrice":59,"stock":143,"productImage":"智能插线板_1533290539544.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642987e887595a3cf388f8"},"productId":"1533290887973","productName":"多功能数据线充电线","salePrice":26.6,"stock":187,"productImage":"多功能数据线充电线_1533290887972.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b6429f6e887595a3cf388f9"},"productId":"1533290998897","productName":"头戴式耳机","salePrice":168,"stock":2,"productImage":"头戴式耳机_1533290998896.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642a69e887595a3cf388fa"},"productId":"1533291113806","productName":"小钢炮蓝牙音箱","salePrice":126,"stock":64,"productImage":"小钢炮蓝牙音箱_1533291113806.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642bf9e887595a3cf388fb"},"productId":"1533291513546","productName":"智能摄像机","salePrice":389,"stock":21,"productImage":"智能摄像机_1533291513543.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642c65e887595a3cf388fc"},"productId":"1533291621329","productName":"智能电器 电饭煲","salePrice":999,"stock":68,"productImage":"智能电器 电饭煲_1533291621328.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642d88e887595a3cf388fd"},"productId":"1533291912113","productName":"平衡车","salePrice":1999,"stock":59,"productImage":"平衡车_1533291912112.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642f01e887595a3cf388fe"},"productId":"1533292289843","productName":"小米净水器","salePrice":1998,"stock":26,"productImage":"小米净水器_1533292289842.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642f74e887595a3cf388ff"},"productId":"1533292404448","productName":"小米扫地机器人","salePrice":1699,"stock":20,"productImage":"小米扫地机器人_1533292404447.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b642ffde887595a3cf38900"},"productId":"1533292541143","productName":"无线蓝牙头戴式耳麦","salePrice":1100,"stock":56,"productImage":"无线蓝牙头戴式耳麦_1533292541142.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b643032e887595a3cf38901"},"productId":"1533292594422","productName":"Leme头戴式耳麦 红色立体声高保真","salePrice":1296,"stock":19,"productImage":"Leme头戴式耳麦 红色立体声高保真_1533292594421.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b64306ee887595a3cf38902"},"productId":"1533292654603","productName":"无线蓝牙音箱 立体环绕音","salePrice":2000,"stock":6,"productImage":"无线蓝牙音箱 立体环绕音_1533292654599.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b6432e8e887595a3cf38903"},"productId":"1533293288589","productName":"遥控飞机","salePrice":2668,"stock":27,"productImage":"遥控飞机_1533293288589.jpg","checked":"1","__v":0}
+{"_id":{"$oid":"5b64339be887595a3cf38904"},"productId":"1533293467548","productName":"IPhoneX","salePrice":9689,"stock":68,"productImage":"IPhoneX_1533293467542.jpg","checked":"1","__v":0}
